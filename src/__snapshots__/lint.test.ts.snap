@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`content: SyntaxError 1`] = `
+Object {
+  "errorCount": 1,
+  "filePath": "path/to/somewhere",
+  "messages": Array [
+    Object {
+      "column": 7,
+      "line": 1,
+      "message": "Unexpected token (1:7)",
+      "nodeType": "Unknown",
+      "ruleId": "prettier/prettier",
+      "severity": 2,
+    },
+  ],
+  "source": "const 123;",
+  "warningCount": 0,
+}
+`;
+
+exports[`content: formatted 1`] = `
+Object {
+  "errorCount": 0,
+  "filePath": "path/to/somewhere",
+  "messages": Array [],
+  "source": "let x = 1;
+",
+  "warningCount": 0,
+}
+`;

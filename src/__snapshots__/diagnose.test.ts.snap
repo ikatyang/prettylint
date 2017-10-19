@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`already formatted 1`] = `
+Object {
+  "diagnostics": Array [],
+  "formatted": "const x = \\"a\\";
+",
+}
+`;
+
+exports[`operation: delete 1`] = `
+Object {
+  "diagnostics": Array [
+    Object {
+      "delete_text": " ",
+      "end": Object {
+        "column": 9,
+        "line": 0,
+        "offset": 9,
+      },
+      "insert_text": "",
+      "message": "Delete \`·\`",
+      "operation": 0,
+      "start": Object {
+        "column": 8,
+        "line": 0,
+        "offset": 8,
+      },
+    },
+  ],
+  "formatted": "const x = \\"a\\";
+",
+}
+`;
+
+exports[`operation: insert 1`] = `
+Object {
+  "diagnostics": Array [
+    Object {
+      "delete_text": "",
+      "end": Object {
+        "column": 7,
+        "line": 0,
+        "offset": 7,
+      },
+      "insert_text": " ",
+      "message": "Insert \`·\`",
+      "operation": 1,
+      "start": Object {
+        "column": 7,
+        "line": 0,
+        "offset": 7,
+      },
+    },
+  ],
+  "formatted": "const x = \\"a\\";
+",
+}
+`;
+
+exports[`operation: replace 1`] = `
+Object {
+  "diagnostics": Array [
+    Object {
+      "delete_text": "'a'",
+      "end": Object {
+        "column": 13,
+        "line": 0,
+        "offset": 13,
+      },
+      "insert_text": "\\"a\\"",
+      "message": "Replace \`'a'\` with \`\\"a\\"\`",
+      "operation": 2,
+      "start": Object {
+        "column": 10,
+        "line": 0,
+        "offset": 10,
+      },
+    },
+  ],
+  "formatted": "const x = \\"a\\";
+",
+}
+`;
