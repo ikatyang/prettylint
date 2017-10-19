@@ -2,13 +2,6 @@ import * as path from 'path';
 import * as prettier from 'prettier';
 import { diagnose } from './diagnose';
 
-// wait for DefinitelyTyped/DefinitelyTyped#20708
-declare module 'prettier' {
-  interface ResolveConfigOptions {
-    config?: string;
-  }
-}
-
 // https://eslint.org/docs/developer-guide/working-with-custom-formatters#description-of-the-results
 export interface LintResult {
   /**
