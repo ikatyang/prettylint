@@ -38,7 +38,7 @@
   "devDependencies": {
     "@types/eslint-plugin-prettier": "2.2.0",
     "@types/globby": "6.1.0",
-    "@types/jest": "21.1.4",
+    "@types/jest": "21.1.5",
     "@types/meow": "3.6.2",
     "@types/node": "8.0.46",
     "@types/prettier": "1.7.1",
