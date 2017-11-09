@@ -41,7 +41,7 @@
     "@types/jest": "21.1.5",
     "@types/meow": "3.6.2",
     "@types/node": "8.0.50",
-    "@types/prettier": "1.7.2",
+    "@types/prettier": "1.8.0",
     "@types/strip-ansi": "3.0.0",
     "dedent": "0.7.0",
     "jest": "21.2.1",
