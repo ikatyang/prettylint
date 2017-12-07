@@ -40,7 +40,7 @@
     "@types/globby": "6.1.0",
     "@types/jest": "21.1.8",
     "@types/meow": "3.6.2",
-    "@types/node": "8.0.56",
+    "@types/node": "8.0.57",
     "@types/prettier": "1.8.1",
     "@types/strip-ansi": "3.0.0",
     "dedent": "0.7.0",
