@@ -50,9 +50,9 @@
   version "10.3.3"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.3.3.tgz#8798d9e39af2fa604f715ee6a6b19796528e46c3"
 
-"@types/node@8.10.34":
-  version "8.10.34"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.34.tgz#a94d9f3767fe45f211e09e49af598bb84822280c"
+"@types/node@8.10.35":
+  version "8.10.35"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.35.tgz#b24cc302d534177f7e4cb589e48fdc5ab6b907c4"
 
 "@types/prettier@1.9.0":
   version "1.9.0"
