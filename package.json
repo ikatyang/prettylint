@@ -39,7 +39,7 @@
     "@types/eslint-plugin-prettier": "2.2.0",
     "@types/globby": "6.1.0",
     "@types/jest": "21.1.10",
-    "@types/meow": "3.6.2",
+    "@types/meow": "4.0.1",
     "@types/node": "8.10.35",
     "@types/prettier": "1.9.0",
     "@types/strip-ansi": "3.0.0",
