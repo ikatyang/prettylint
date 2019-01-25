@@ -8,6 +8,19 @@ Run Prettier as a linter
 
 [Changelog](https://github.com/ikatyang/prettylint/blob/master/CHANGELOG.md)
 
+## Sample
+
+```
+$ prettylint "**/*.ts"
+
+  src/diagnose.ts:14:13
+  ⚠  14:13  Delete ·                                          prettier/prettier
+  ⚠  15:14  Insert ·                                          prettier/prettier
+  ⚠  47:34  Replace "" with ''                                prettier/prettier
+
+  3 warnings
+```
+
 ## Install
 
 ```sh
