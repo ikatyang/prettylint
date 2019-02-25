@@ -4,16 +4,13 @@ node_js:
 - 4
 - stable
 
-before_install:
-- yarn global add codecov
-
 script:
 - yarn run lint
 - yarn run test
 - yarn run docs && git diff --exit-code README.md
 
 after_script:
-- codecov
+- yarn codecov
 
 cache:
   yarn: true

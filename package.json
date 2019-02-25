@@ -43,6 +43,7 @@
     "@types/node": "8.10.40",
     "@types/prettier": "1.9.0",
     "@types/strip-ansi": "3.0.0",
+    "codecov": "3.2.0",
     "dedent": "0.7.0",
     "jest": "21.2.1",
     "markdown-magic": "0.1.25",
@@ -59,6 +60,10 @@
   },
   "peerDependencies": {
     "prettier": "^1.6.0"
+  },
+  "resolutions": {
+    "**/har-validator": "5.1.0",
+    "**/tough-cookie": "2.4.3"
   },
   "engines": {
     "node": ">= 4"
