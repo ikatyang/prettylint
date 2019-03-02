@@ -50,9 +50,10 @@
   version "11.9.5"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-11.9.5.tgz#011eece9d3f839a806b63973e228f85967b79ed3"
 
-"@types/node@8.10.40":
-  version "8.10.40"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.40.tgz#4314888d5cd537945d73e9ce165c04cc550144a4"
+"@types/node@8.10.42":
+  version "8.10.42"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.42.tgz#d3d8e738e13540a09b3f4a714dac1ffbf8939f7d"
+  integrity sha512-8LCqostMfYwQs9by1k21/P4KZp9uFQk3Q528y3qtPKQnCJmKz0Em3YzgeNjTNV1FVrG/7n/6j12d4UKg9zSgDw==
 
 "@types/prettier@1.9.0":
   version "1.9.0"
