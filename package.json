@@ -32,14 +32,14 @@
     "globby": "^6.1.0",
     "ignore": "^3.3.5",
     "lines-and-columns": "^1.1.6",
-    "meow": "^3.7.0",
+    "meow": "^5.0.0",
     "tslib": "^1.8.0"
   },
   "devDependencies": {
     "@types/eslint-plugin-prettier": "2.2.0",
     "@types/globby": "6.1.0",
     "@types/jest": "21.1.10",
-    "@types/meow": "3.6.2",
+    "@types/meow": "5.0.0",
     "@types/node": "8.10.49",
     "@types/prettier": "1.9.0",
     "@types/strip-ansi": "3.0.0",
