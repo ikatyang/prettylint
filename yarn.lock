@@ -2514,9 +2514,10 @@ markdown-link@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/markdown-link/-/markdown-link-0.1.1.tgz#32c5c65199a6457316322d1e4229d13407c8c7cf"
 
-markdown-magic@0.1.25:
-  version "0.1.25"
-  resolved "https://registry.yarnpkg.com/markdown-magic/-/markdown-magic-0.1.25.tgz#d044d90632b85ff1576a047da152852d53a8e55a"
+markdown-magic@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/markdown-magic/-/markdown-magic-1.0.0.tgz#5e8bcf3ad949592c2d143563bb6f616375cad30f"
+  integrity sha512-H2Y8eGA19kF5EPs1vdJp0+21mqEkJylFu134anEtolygwvaHZDyBKQVE5mUXxWkuvWizBp5QQU8O8BA8hradmA==
   dependencies:
     commander "^2.9.0"
     deepmerge "^1.3.0"
@@ -2524,12 +2525,13 @@ markdown-magic@0.1.25:
     fs-extra "^1.0.0"
     globby "^6.1.0"
     is-local-path "^0.1.6"
-    markdown-toc "^1.0.2"
+    markdown-toc "^1.2.0"
     sync-request "^3.0.1"
 
-markdown-toc@^1.0.2:
+markdown-toc@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/markdown-toc/-/markdown-toc-1.2.0.tgz#44a15606844490314afc0444483f9e7b1122c339"
+  integrity sha512-eOsq7EGd3asV0oBfmyqngeEIhrbkc7XVP63OwcJBIhH2EpG2PzFcbZdhy1jutXSlRBBVMNXHvMtSr5LAxSUvUg==
   dependencies:
     concat-stream "^1.5.2"
     diacritics-map "^0.1.0"
