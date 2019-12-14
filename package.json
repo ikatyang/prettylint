@@ -32,7 +32,7 @@
     "globby": "^6.1.0",
     "ignore": "^3.3.5",
     "lines-and-columns": "^1.1.6",
-    "meow": "^3.7.0",
+    "meow": "^6.0.0",
     "tslib": "^1.8.0"
   },
   "devDependencies": {
