@@ -51,7 +51,7 @@
     "prettier-config-ikatyang": "1.1.1",
     "standard-version": "4.4.0",
     "strip-ansi": "4.0.0",
-    "ts-jest": "21.2.4",
+    "ts-jest": "24.3.0",
     "tslint": "5.14.0",
     "tslint-config-ikatyang": "2.5.1",
     "tslint-config-prettier": "1.18.0",
