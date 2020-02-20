@@ -4,16 +4,18 @@ node_js:
 - 4
 - stable
 
+before_install:
+- npm install -g npm@5
+
 script:
-- yarn run lint
-- yarn run test
-- yarn run docs && git diff --exit-code README.md
+- npm run lint
+- npm run test
+- npm run docs && git diff --exit-code README.md
 
 after_script:
-- yarn codecov
+- npx codecov
 
 cache:
-  yarn: true
   directories:
   - node_modules
 
