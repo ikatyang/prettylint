@@ -43,7 +43,7 @@
     "@types/node": "8.10.49",
     "@types/prettier": "1.9.0",
     "@types/strip-ansi": "3.0.0",
-    "codecov": "3.6.5",
+    "codecov": "3.7.1",
     "dedent": "0.7.0",
     "jest": "21.2.1",
     "markdown-magic": "0.1.25",
