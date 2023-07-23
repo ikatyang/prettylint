@@ -1,38 +1,45 @@
-import * as path from 'path';
-import { lint } from './lint';
+import * as path from "node:path";
+import { expect, test } from "vitest";
+import { lint } from "./lint.js";
 
-const base_dir = path.resolve(__dirname, '../fixtures/lint');
+const baseDir = path.resolve(__dirname, "../fixtures/lint");
 
-test('filename: any, config: false', async () =>
-  lint('path/to/somewhere', 'const n = 0;', { config: false }).then(result => {
-    expect(result.output).toBe('const n = 0;\n');
-  }));
+test("filename: any, config: false", async () => {
+  const result = await lint("path/to/somewhere.js", "const n = 0;", {
+    config: false,
+  });
+  expect(result.output).toBe("const n = 0;\n");
+});
 
 test('filename: any, config: "path/to/singleQuote/.prettierrc"', async () => {
-  const config = `${base_dir}/singleQuote/.prettierrc`;
-  return lint('path/to/somewhere', 'let x = "hi";', { config }).then(result => {
-    expect(result.output).toBe("let x = 'hi';\n");
+  const config = `${baseDir}/singleQuote/.prettierrc`;
+  const result = await lint("path/to/somewhere.js", 'let x = "hi";', {
+    config,
   });
+  expect(result.output).toBe("let x = 'hi';\n");
 });
 
 test('filename: "path/to/useTabs/file.js", config: undefined', async () => {
-  const filename = `${base_dir}/useTabs/file.js`;
-  return lint(filename, 'if (true) { console.log(123); }').then(result => {
-    expect(result.output).toBe('if (true) {\n\tconsole.log(123);\n}\n');
-  });
+  const filename = `${baseDir}/useTabs/file.js`;
+  const result = await lint(filename, "if (true) { console.log(123); }");
+  expect(result.output).toBe("if (true) {\n\tconsole.log(123);\n}\n");
 });
 
-test('content: SyntaxError', async () =>
-  lint('path/to/somewhere', 'const 123;', { config: false }).then(result => {
-    expect(result).toMatchSnapshot();
-  }));
+test("content: SyntaxError", async () => {
+  const result = await lint("path/to/somewhere.js", "const 123;", {
+    config: false,
+  });
+  expect(result).toMatchSnapshot();
+});
 
-test('content: formatted', async () =>
-  lint('path/to/somewhere', 'let x = 1;\n', { config: false }).then(result => {
-    expect(result).toMatchSnapshot();
-  }));
+test("content: formatted", async () => {
+  const result = await lint("path/to/somewhere.js", "let x = 1;\n", {
+    config: false,
+  });
+  expect(result).toMatchSnapshot();
+});
 
-test('filename: "path/to/filepath/example.json"', async () =>
-  lint('path/to/somewhere.json', '{\n"name": "hello"\n}').then(result => {
-    expect(result.output).toBe('{\n  "name": "hello"\n}\n');
-  }));
+test('filename: "path/to/filepath/example.json"', async () => {
+  const result = await lint("path/to/somewhere.json", '{\n"name": "hello"\n}');
+  expect(result.output).toBe('{\n  "name": "hello"\n}\n');
+});
