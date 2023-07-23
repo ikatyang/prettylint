@@ -1,6 +1,6 @@
-import * as utils from 'eslint-plugin-prettier';
-import LinesAndColumns from 'lines-and-columns';
-import * as prettier from 'prettier';
+import { LinesAndColumns } from "lines-and-columns";
+import * as prettier from "prettier";
+import * as utils from "prettier-linter-helpers";
 
 export interface DiagnoseResult {
   formatted: string;
@@ -12,8 +12,8 @@ export interface Diagnostic {
   end: Location;
   message: string;
   operation: Operation;
-  insert_text: string;
-  delete_text: string;
+  insertText: string;
+  deleteText: string;
 }
 
 export enum Operation {
@@ -31,62 +31,63 @@ export interface Location {
   offset: number;
 }
 
-export function diagnose(
+export async function diagnose(
   content: string,
   options?: prettier.Options,
-): DiagnoseResult {
+): Promise<DiagnoseResult> {
   const diagnostics: Diagnostic[] = [];
 
-  const formatted = prettier.format(content, options);
+  const formatted = await prettier.format(content, options);
   const differences = utils.generateDifferences(content, formatted);
 
   if (differences.length !== 0) {
-    differences.forEach(difference => {
+    differences.forEach((difference) => {
       const {
-        offset: start_offset,
-        deleteText: delete_text = '',
-        insertText: insert_text = '',
+        offset: startOffset,
+        deleteText = "",
+        insertText = "",
       } = difference;
 
-      const end_offset = start_offset + delete_text.length;
+      const endOffset = startOffset + deleteText.length;
 
-      const insert_code = utils.showInvisibles(insert_text);
-      const delete_code = utils.showInvisibles(delete_text);
+      const insertCode = utils.showInvisibles(insertText);
+      const deleteCode = utils.showInvisibles(deleteText);
 
       let message: string;
       let operation: Operation;
 
       switch (difference.operation) {
-        case 'delete':
+        case "delete":
           operation = Operation.Delete;
-          message = `Delete \`${delete_code}\``;
+          message = `Delete \`${deleteCode}\``;
           break;
-        case 'insert':
+        case "insert":
           operation = Operation.Insert;
-          message = `Insert \`${insert_code}\``;
+          message = `Insert \`${insertCode}\``;
           break;
-        case 'replace':
+        case "replace":
           operation = Operation.Replace;
-          message = `Replace \`${delete_code}\` with \`${insert_code}\``;
+          message = `Replace \`${deleteCode}\` with \`${insertCode}\``;
           break;
-        // istanbul ignore next
+        /* c8 ignore start */
         default:
           throw new Error(`Unexpected operation '${difference.operation}'`);
+        /* c8 ignore stop */
       }
 
       const locator = new LinesAndColumns(content);
-      const get_location = (offset: number): Location => {
+      const getLocation = (offset: number): Location => {
         const { line, column } = locator.locationForIndex(offset)!;
         return { line, column, offset };
       };
 
       diagnostics.push({
-        start: get_location(start_offset),
-        end: get_location(end_offset),
+        start: getLocation(startOffset),
+        end: getLocation(endOffset),
         message,
         operation,
-        insert_text,
-        delete_text,
+        insertText: insertText,
+        deleteText: deleteText,
       });
     });
   }

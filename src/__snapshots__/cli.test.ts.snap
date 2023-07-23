@@ -1,8 +1,8 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`fix: true 1`] = `
-Array [
-  Object {
+[
+  {
     "content": "const x = 123;
 ",
     "filename": "unformatted.js",
@@ -25,18 +25,18 @@ exports[`format: default 1`] = `
 `;
 
 exports[`ignorePath: ".ignore" 1`] = `
-Array [
-  Object {
+[
+  {
     "errorCount": 0,
-    "filePath": "node_modules/non-ignored.js",
-    "messages": Array [],
+    "filePath": "non-ignored.js",
+    "messages": [],
     "source": "",
     "warningCount": 0,
   },
-  Object {
+  {
     "errorCount": 0,
-    "filePath": "non-ignored.js",
-    "messages": Array [],
+    "filePath": "node_modules/non-ignored.js",
+    "messages": [],
     "source": "",
     "warningCount": 0,
   },
@@ -44,18 +44,18 @@ Array [
 `;
 
 exports[`ignorePath: default, .prettierignore does not exist 1`] = `
-Array [
-  Object {
+[
+  {
     "errorCount": 0,
-    "filePath": "folder/non-ignored.js",
-    "messages": Array [],
+    "filePath": "non-ignored.js",
+    "messages": [],
     "source": "",
     "warningCount": 0,
   },
-  Object {
+  {
     "errorCount": 0,
-    "filePath": "non-ignored.js",
-    "messages": Array [],
+    "filePath": "folder/non-ignored.js",
+    "messages": [],
     "source": "",
     "warningCount": 0,
   },
@@ -63,18 +63,18 @@ Array [
 `;
 
 exports[`ignorePath: default, .prettierignore exists 1`] = `
-Array [
-  Object {
+[
+  {
     "errorCount": 0,
-    "filePath": "node_modules/non-ignored.js",
-    "messages": Array [],
+    "filePath": "non-ignored.js",
+    "messages": [],
     "source": "",
     "warningCount": 0,
   },
-  Object {
+  {
     "errorCount": 0,
-    "filePath": "non-ignored.js",
-    "messages": Array [],
+    "filePath": "node_modules/non-ignored.js",
+    "messages": [],
     "source": "",
     "warningCount": 0,
   },

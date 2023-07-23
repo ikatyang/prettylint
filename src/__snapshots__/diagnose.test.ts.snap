@@ -1,27 +1,27 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`already formatted 1`] = `
-Object {
-  "diagnostics": Array [],
+{
+  "diagnostics": [],
   "formatted": "const x = \\"a\\";
 ",
 }
 `;
 
 exports[`operation: delete 1`] = `
-Object {
-  "diagnostics": Array [
-    Object {
-      "delete_text": " ",
-      "end": Object {
+{
+  "diagnostics": [
+    {
+      "deleteText": " ",
+      "end": {
         "column": 9,
         "line": 0,
         "offset": 9,
       },
-      "insert_text": "",
+      "insertText": "",
       "message": "Delete \`·\`",
       "operation": 0,
-      "start": Object {
+      "start": {
         "column": 8,
         "line": 0,
         "offset": 8,
@@ -34,19 +34,19 @@ Object {
 `;
 
 exports[`operation: insert 1`] = `
-Object {
-  "diagnostics": Array [
-    Object {
-      "delete_text": "",
-      "end": Object {
+{
+  "diagnostics": [
+    {
+      "deleteText": "",
+      "end": {
         "column": 7,
         "line": 0,
         "offset": 7,
       },
-      "insert_text": " ",
+      "insertText": " ",
       "message": "Insert \`·\`",
       "operation": 1,
-      "start": Object {
+      "start": {
         "column": 7,
         "line": 0,
         "offset": 7,
@@ -59,19 +59,19 @@ Object {
 `;
 
 exports[`operation: replace 1`] = `
-Object {
-  "diagnostics": Array [
-    Object {
-      "delete_text": "'a'",
-      "end": Object {
+{
+  "diagnostics": [
+    {
+      "deleteText": "'a'",
+      "end": {
         "column": 13,
         "line": 0,
         "offset": 13,
       },
-      "insert_text": "\\"a\\"",
+      "insertText": "\\"a\\"",
       "message": "Replace \`'a'\` with \`\\"a\\"\`",
       "operation": 2,
-      "start": Object {
+      "start": {
         "column": 10,
         "line": 0,
         "offset": 10,

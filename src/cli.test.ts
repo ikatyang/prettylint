@@ -1,9 +1,9 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import strip_ansi = require('strip-ansi');
-import { run } from './cli';
+import * as path from "node:path";
+import stripAnsi from "strip-ansi";
+import { afterAll, beforeAll, beforeEach, expect, test, vi } from "vitest";
+import { run } from "./cli.js";
 
-const base_dir = path.resolve(__dirname, '../fixtures/cli');
+const baseDir = path.resolve(__dirname, "../fixtures/cli");
 
 let status: number | undefined;
 let stdout: string | undefined;
@@ -11,101 +11,102 @@ let writes: { filename: string; content: string }[];
 
 setup();
 
-test('ignorePath: default, .prettierignore exists', async () =>
-  run_cli(['**/*.js'], {
-    cwd: `${base_dir}/ignore-path/default-with-prettierignore`,
-  }).then(results => {
-    expect(status).toBe(0);
-    expect(results).toMatchSnapshot();
-  }));
+test("ignorePath: default, .prettierignore exists", async () => {
+  const results = await runCli(["**/*.js"], {
+    cwd: `${baseDir}/ignore-path/default-with-prettierignore`,
+  });
+  expect(status).toBe(0);
+  expect(results).toMatchSnapshot();
+});
 
-test('ignorePath: default, .prettierignore does not exist', async () =>
-  run_cli(['**/*.js'], {
-    cwd: `${base_dir}/ignore-path/default-without-prettierignore`,
-  }).then(results => {
-    expect(status).toBe(0);
-    expect(results).toMatchSnapshot();
-  }));
+test("ignorePath: default, .prettierignore does not exist", async () => {
+  const results = await runCli(["**/*.js"], {
+    cwd: `${baseDir}/ignore-path/default-without-prettierignore`,
+  });
+  expect(status).toBe(0);
+  expect(results).toMatchSnapshot();
+});
 
-test('ignorePath: ".ignore"', async () =>
-  run_cli(['**/*.js', '--ignore-path', '.ignore'], {
-    cwd: `${base_dir}/ignore-path/custom-ignore`,
-  }).then(results => {
-    expect(status).toBe(0);
-    expect(results).toMatchSnapshot();
-  }));
+test('ignorePath: ".ignore"', async () => {
+  const results = await runCli(["**/*.js", "--ignore-path", ".ignore"], {
+    cwd: `${baseDir}/ignore-path/custom-ignore`,
+  });
+  expect(status).toBe(0);
+  expect(results).toMatchSnapshot();
+});
 
-test('fix: true', async () =>
-  run_cli(['**/*.js', '--fix'], { cwd: `${base_dir}/fix` }).then(() => {
-    expect(status).toBe(0);
-    expect(stdout).toBe(undefined);
-    expect(writes).toMatchSnapshot();
-  }));
+test("fix: true", async () => {
+  await runCli(["**/*.js", "--fix"], { cwd: `${baseDir}/fix` });
+  expect(status).toBe(0);
+  expect(stdout).toBe(undefined);
+  expect(writes).toMatchSnapshot();
+});
 
-test('format: default', async () =>
-  run_cli(['**/*.js'], { cwd: `${base_dir}/format/default` }).then(() => {
-    expect(status).toBe(1);
-    expect(stdout).toMatchSnapshot();
-  }));
+test("format: default", async () => {
+  await runCli(["**/*.js"], { cwd: `${baseDir}/format/default` });
+  expect(status).toBe(1);
+  expect(stdout).toMatchSnapshot();
+});
 
-test('silent: true', async () =>
-  run_cli(['**/*.js', '--silent'], { cwd: `${base_dir}/silent` }).then(() => {
-    expect(status).toBe(1);
-    expect(stdout).toBe(undefined);
-  }));
+test("silent: true", async () => {
+  await runCli(["**/*.js", "--silent"], { cwd: `${baseDir}/silent` });
+  expect(status).toBe(1);
+  expect(stdout).toBe(undefined);
+});
 
 interface RunCliOptions {
   cwd: string;
 }
 
-async function run_cli(argv: string[], options: RunCliOptions) {
+async function runCli(argv: string[], options: RunCliOptions) {
   process.chdir(options.cwd);
-  return run(argv).then(results => {
-    status =
-      status !== undefined
-        ? status
-        : // tslint:disable-next-line:strict-type-predicates
-          process.exitCode !== undefined ? process.exitCode : 0;
-    stdout = stdout === undefined ? undefined : strip_ansi(stdout);
-    return results;
-  });
+  const results = await run(argv);
+  status =
+    status !== undefined
+      ? status
+      : process.exitCode !== undefined
+      ? process.exitCode
+      : 0;
+  stdout = stdout === undefined ? undefined : stripAnsi(stdout);
+  return results;
 }
 
 function setup() {
-  const original_cwd = process.cwd();
-  const original_env_ci = process.env.CI;
-  const original_exit_code = process.exitCode;
+  const originalCwd = process.cwd();
+  const originalEnvCi = process.env.CI;
+  const originalExitCode = process.exitCode;
 
   beforeAll(() => {
-    jest.spyOn(console, 'log').mockImplementation((...messages: string[]) => {
-      if (!is_exited()) {
-        stdout = `${stdout === undefined ? '' : stdout}${messages.join(' ')}\n`;
+    vi.spyOn(console, "log").mockImplementation((...messages: string[]) => {
+      if (!isExited()) {
+        stdout = `${stdout === undefined ? "" : stdout}${messages.join(" ")}\n`;
       }
     });
-    jest
-      .spyOn(fs, 'writeFile')
-      .mockImplementation(
-        (filename: string, content: string, callback: () => void) => {
-          if (!is_exited()) {
-            writes.push({ filename, content });
-          }
-          callback();
-        },
-      );
-    jest.spyOn(process, 'exit').mockImplementation((exit_code?: number) => {
-      if (!is_exited()) {
-        status = exit_code === undefined ? 0 : exit_code;
-      }
+    vi.mock("node:fs", async () => {
+      return {
+        ...(await vi.importActual<typeof import("node:fs")>("node:fs")),
+        writeFile: vi
+          .fn()
+          .mockImplementation(
+            (filename: string, content: string, callback: () => void) => {
+              if (!isExited()) {
+                writes.push({ filename, content });
+              }
+              callback();
+            },
+          ),
+      };
     });
-
-    function is_exited() {
-      // tslint:disable-next-line:strict-type-predicates
-      return status !== undefined || process.exitCode !== undefined;
-    }
+    vi.spyOn(process, "exit").mockImplementation((exitCode?: number) => {
+      if (!isExited()) {
+        status = exitCode === undefined ? 0 : exitCode;
+      }
+      return undefined as never;
+    });
   });
 
   beforeEach(() => {
-    process.env.CI = 'true';
+    process.env.CI = "true";
     process.exitCode = undefined as any;
 
     status = undefined;
@@ -114,13 +115,17 @@ function setup() {
   });
 
   afterAll(() => {
-    process.chdir(original_cwd);
-    process.exitCode = original_exit_code;
+    process.chdir(originalCwd);
+    process.exitCode = originalExitCode;
 
-    if (original_env_ci !== undefined) {
-      process.env.CI = original_env_ci;
+    if (originalEnvCi !== undefined) {
+      process.env.CI = originalEnvCi;
     } else {
       delete process.env.CI;
     }
   });
+}
+
+function isExited() {
+  return status !== undefined || process.exitCode !== undefined;
 }

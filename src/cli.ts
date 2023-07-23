@@ -1,20 +1,19 @@
-import * as fs from 'fs';
-import globby = require('globby');
-import ignore = require('ignore');
-import meow = require('meow');
-import * as path from 'path';
-import { lint, LintResult } from './lint';
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { globby } from "globby";
+import ignore from "ignore";
+import meow from "meow";
+import { lint, LintResult } from "./lint.js";
 
 type Formatter = (results: LintResult[]) => string;
 
-// tslint:disable-next-line:no-inferrable-types
-export const help_message: string = `
+export const helpMessage: string = `
   Usage
     $ prettylint <glob> ...
 
   Options
     --no-config           Do not load config file.
-    --config <path>       Specify the config file. (require prettier@1.7.1+)
+    --config <path>       Specify the config file.
     --fix                 Fix linting errors.
     --format <path>       Specify the module to format output.
                           Defaults to "eslint-formatter-pretty".
@@ -31,107 +30,112 @@ export const help_message: string = `
 `;
 
 export async function run(argv: string[]) {
-  const { input, flags } = meow(
-    {
-      argv,
-      version: true,
-      help: help_message,
-    },
-    {
-      alias: {
-        h: 'help',
-        v: 'version',
+  const { input, flags } = meow(helpMessage, {
+    importMeta: import.meta,
+    argv,
+    flags: {
+      fix: {
+        type: "boolean",
+        default: false,
       },
-      boolean: ['fix', 'silent'],
-      string: ['config', 'ignore-path', 'format'],
-      default: {
-        fix: false,
-        format: 'eslint-formatter-pretty',
-        silent: false,
+      silent: {
+        type: "boolean",
+        default: false,
+      },
+      config: {
+        type: "string",
+      },
+      ignorePath: {
+        type: "string",
+      },
+      format: {
+        type: "string",
+        default: "eslint-formatter-pretty",
+      },
+      help: {
+        aliases: ["h"],
+      },
+      version: {
+        aliases: ["v"],
       },
     },
-  );
+  });
 
-  const ignorer = ignore();
-  const default_ignore_path = '.prettierignore';
+  const ignorer = ignore.default();
+  const defaultIgnorePath = ".prettierignore";
 
   if (flags.ignorePath === undefined) {
-    if (!fs.existsSync(default_ignore_path)) {
-      input.push('!**/node_modules/**');
+    if (!fs.existsSync(defaultIgnorePath)) {
+      input.push("!**/node_modules/**");
     } else {
-      ignorer.add(await read_file(default_ignore_path));
+      ignorer.add(await readFile(defaultIgnorePath));
     }
   } else {
-    ignorer.add(await read_file(flags.ignorePath));
+    ignorer.add(await readFile(flags.ignorePath));
   }
 
-  const filenames: string[] = ignorer.filter(
-    (await globby(input, { dot: true })).map(filename =>
-      path.relative('.', filename),
-    ),
-  ) as any;
+  const filenames = ignorer.filter(
+    (await globby(input, { dot: true })) //
+      .map((filename) => path.relative(".", filename)),
+  );
 
-  let error_count = 0;
-  let warning_count = 0;
+  let errorCount = 0;
+  let warningCount = 0;
 
   const results = await Promise.all(
-    filenames.map(async filename => {
-      const content = await read_file(filename);
+    filenames.map(async (filename) => {
+      const content = await readFile(filename);
       const result = await lint(filename, content, { config: flags.config });
 
-      error_count += result.errorCount;
-      warning_count += result.warningCount;
+      errorCount += result.errorCount;
+      warningCount += result.warningCount;
 
       if (result.output === undefined || !flags.fix) {
         return result;
       }
 
-      await write_file(filename, result.output);
+      await writeFile(filename, result.output);
 
-      // tslint:disable-next-line:no-unused
-      const { output, ...new_result } = result;
-      return { ...new_result, messages: [], warningCount: 0 };
+      const { output, ...newResult } = result;
+      return { ...newResult, messages: [], warningCount: 0 };
     }),
   );
 
   if (!flags.silent) {
-    const formatter: Formatter = require(flags.format);
+    const formatter: Formatter = (await import(flags.format)).default;
     const message = formatter(results);
     if (message.length !== 0) {
-      // tslint:disable-next-line:no-console
       console.log(message);
     }
   }
 
-  if (error_count !== 0 || (!flags.fix && warning_count !== 0)) {
+  if (errorCount !== 0 || (!flags.fix && warningCount !== 0)) {
     process.exitCode = 1;
   }
 
   return results;
 }
 
-async function read_file(filename: string) {
+async function readFile(filename: string) {
   return new Promise<string>((resolve, reject) => {
-    fs.readFile(filename, { encoding: 'utf8' }, (error, data) => {
-      // istanbul ignore if
-      // tslint:disable-next-line:strict-boolean-expressions
+    fs.readFile(filename, { encoding: "utf8" }, (error, data) => {
+      /* c8 ignore start */
       if (error) {
         reject(error);
-      } else {
+      } /* c8 ignore stop */ else {
         resolve(data);
       }
     });
   });
 }
 
-async function write_file(filename: string, content: string) {
-  return new Promise<never>((resolve, reject) => {
-    fs.writeFile(filename, content, error => {
-      // istanbul ignore if
-      // tslint:disable-next-line:strict-boolean-expressions
+async function writeFile(filename: string, content: string) {
+  return new Promise<void>((resolve, reject) => {
+    fs.writeFile(filename, content, (error) => {
+      /* c8 ignore start */
       if (error) {
         reject(error);
-      } else {
+      } /* c8 ignore stop */ else {
         resolve();
       }
     });

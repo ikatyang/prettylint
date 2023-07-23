@@ -1,5 +1,6 @@
 {
   "name": "prettylint",
+  "type": "module",
   "version": "1.0.0",
   "description": "Run Prettier as a linter",
   "keywords": [
@@ -7,8 +8,6 @@
     "prettier"
   ],
   "bin": "bin/cli.js",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "repository": "https://github.com/ikatyang/prettylint",
   "homepage": "https://github.com/ikatyang/prettylint#readme",
   "author": {
@@ -18,58 +17,45 @@
   },
   "license": "MIT",
   "scripts": {
-    "prepublish": "npm run build",
-    "lint": "tslint -p ./tsconfig.json --type-check",
-    "test": "jest",
-    "prebuild": "rm -rf ./lib",
+    "prepack": "pnpm run build",
+    "lint": "prettier --check .",
+    "test": "vitest --no-threads",
     "build": "tsc -p ./tsconfig.build.json",
-    "docs": "md-magic --path README.md",
     "release": "standard-version"
   },
   "dependencies": {
-    "eslint-formatter-pretty": "^1.3.0",
-    "eslint-plugin-prettier": "^2.2.0",
-    "globby": "^6.1.0",
-    "ignore": "^3.3.5",
-    "lines-and-columns": "^1.1.6",
-    "meow": "^3.7.0",
-    "tslib": "^1.8.0"
+    "eslint-formatter-pretty": "^5.0.0",
+    "globby": "^13.2.2",
+    "ignore": "^5.2.4",
+    "lines-and-columns": "^2.0.3",
+    "meow": "^12.0.1",
+    "prettier-linter-helpers": "^1.0.0"
   },
   "devDependencies": {
-    "@types/eslint-plugin-prettier": "2.2.0",
-    "@types/globby": "6.1.0",
-    "@types/jest": "21.1.10",
-    "@types/meow": "3.6.2",
-    "@types/node": "8.10.49",
-    "@types/prettier": "1.9.0",
-    "@types/strip-ansi": "3.0.0",
-    "codecov": "3.7.1",
-    "dedent": "0.7.0",
-    "jest": "21.2.1",
-    "markdown-magic": "0.1.25",
-    "prettier": "1.9.2",
-    "prettier-config-ikatyang": "1.1.1",
-    "standard-version": "4.4.0",
-    "strip-ansi": "4.0.0",
-    "ts-jest": "21.2.4",
-    "tslint": "5.14.0",
-    "tslint-config-ikatyang": "2.5.1",
-    "tslint-config-prettier": "1.18.0",
-    "tslint-plugin-prettier": "2.0.1",
-    "typescript": "2.9.2"
+    "@types/prettier-linter-helpers": "1.0.1",
+    "@vitest/coverage-v8": "0.33.0",
+    "prettier": "3.0.0",
+    "standard-version": "9.5.0",
+    "strip-ansi": "7.1.0",
+    "typescript": "5.1.6",
+    "vite": "4.4.6",
+    "vitest": "0.33.0"
   },
   "peerDependencies": {
-    "prettier": "^1.6.0"
-  },
-  "resolutions": {
-    "**/har-validator": "5.1.0",
-    "**/tough-cookie": "2.4.3"
+    "prettier": "^3.0.0"
   },
   "engines": {
-    "node": ">= 4"
+    "node": ">=16"
   },
   "files": [
     "/bin/**/*",
-    "/lib/**/*"
-  ]
+    "/lib/**/*",
+    "/CHANGELOG.md"
+  ],
+  "packageManager": "pnpm@8.6.6",
+  "pnpm": {
+    "patchedDependencies": {
+      "lines-and-columns@2.0.3": "patches/lines-and-columns@2.0.3.patch"
+    }
+  }
 }

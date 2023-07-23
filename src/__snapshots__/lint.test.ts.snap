@@ -1,11 +1,11 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`content: SyntaxError 1`] = `
-Object {
+{
   "errorCount": 1,
-  "filePath": "path/to/somewhere",
-  "messages": Array [
-    Object {
+  "filePath": "path/to/somewhere.js",
+  "messages": [
+    {
       "column": 7,
       "line": 1,
       "message": "Unexpected token (1:7)",
@@ -20,10 +20,10 @@ Object {
 `;
 
 exports[`content: formatted 1`] = `
-Object {
+{
   "errorCount": 0,
-  "filePath": "path/to/somewhere",
-  "messages": Array [],
+  "filePath": "path/to/somewhere.js",
+  "messages": [],
   "source": "let x = 1;
 ",
   "warningCount": 0,

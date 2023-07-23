@@ -1,10 +1,12 @@
 {
+  "include": ["bin/**/*", "src/**/*"],
   "compilerOptions": {
     "strict": true,
-    "lib": ["es6"],
-    "module": "commonjs",
+    "target": "ES2021",
+    "lib": ["ES2021"],
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "declaration": true,
-    "importHelpers": true
-  },
-  "include": ["src/**/*.ts", "tests/**/*.ts"]
+    "skipLibCheck": true
+  }
 }

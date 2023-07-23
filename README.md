@@ -1,8 +1,7 @@
 # prettylint
 
 [![npm](https://img.shields.io/npm/v/prettylint.svg)](https://www.npmjs.com/package/prettylint)
-[![build](https://img.shields.io/travis/ikatyang/prettylint/master.svg)](https://travis-ci.org/ikatyang/prettylint/builds)
-[![coverage](https://img.shields.io/codecov/c/github/ikatyang/prettylint/master.svg)](https://codecov.io/gh/ikatyang/prettylint)
+[![build](https://img.shields.io/github/actions/workflow/status/ikatyang/prettylint/test.yml)](https://github.com/ikatyang/prettylint/actions?query=branch%3Amaster)
 
 Run Prettier as a linter
 
@@ -24,16 +23,10 @@ $ prettylint "**/*.ts"
 ## Install
 
 ```sh
-# using npm
-npm install --save-dev prettylint prettier
-
-# using yarn
-yarn add --dev prettylint prettier
+npm install prettylint
 ```
 
 ## Usage
-
-<!-- AUTO-GENERATED-CONTENT:START (helpMessage) -->
 
 ```sh
 Usage
@@ -41,7 +34,7 @@ Usage
 
 Options
   --no-config           Do not load config file.
-  --config <path>       Specify the config file. (require prettier@1.7.1+)
+  --config <path>       Specify the config file.
   --fix                 Fix linting errors.
   --format <path>       Specify the module to format output.
                         Defaults to "eslint-formatter-pretty".
@@ -57,19 +50,17 @@ Examples
   $ prettylint "src/**/*.{js,ts}" --ignore-path .gitignore
 ```
 
-<!-- AUTO-GENERATED-CONTENT:END -->
-
 ## Development
 
 ```sh
 # lint
-yarn run lint
+pnpm run lint
 
 # build
-yarn run build
+pnpm run build
 
 # test
-yarn run test
+pnpm run test
 ```
 
 ## License
