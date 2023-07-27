@@ -30,24 +30,25 @@ npm install prettylint
 
 ```sh
 Usage
-  $ prettylint <glob> ...
+  $ prettylint [options] [file/dir/glob ...]
 
 Options
   --no-config           Do not load config file.
   --config <path>       Specify the config file.
+  --no-editorconfig     Do not load .editorconfig
   --fix                 Fix linting errors.
   --format <path>       Specify the module to format output.
                         Defaults to "eslint-formatter-pretty".
   --ignore-path <path>  Specify the .ignore file.
-                        Defaults to ".prettierignore".
+                        Defaults to [".gitignore", ".prettierignore"].
   --silent              Do not print message.
+  --with-node-modules   Process files inside 'node_modules' directory.
   -h, --help            Show help.
   -v, --version         Show version.
 
 Examples
-  $ prettylint "src/**/*.{js,ts}"
-  $ prettylint "src/**/*.{js,ts}" --fix
-  $ prettylint "src/**/*.{js,ts}" --ignore-path .gitignore
+  $ prettylint .
+  $ prettylint . --fix
 ```
 
 ## Development

@@ -1,13 +1,10 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`fix: true 1`] = `
-[
-  {
-    "content": "const x = 123;
-",
-    "filename": "unformatted.js",
-  },
-]
+"/
+  unformatted.js
+    const x = 123;
+    "
 `;
 
 exports[`format: default 1`] = `
@@ -20,7 +17,6 @@ exports[`format: default 1`] = `
 
   1 warning
   1 error
-
 "
 `;
 
@@ -33,13 +29,6 @@ exports[`ignorePath: ".ignore" 1`] = `
     "source": "",
     "warningCount": 0,
   },
-  {
-    "errorCount": 0,
-    "filePath": "node_modules/non-ignored.js",
-    "messages": [],
-    "source": "",
-    "warningCount": 0,
-  },
 ]
 `;
 
@@ -47,14 +36,14 @@ exports[`ignorePath: default, .prettierignore does not exist 1`] = `
 [
   {
     "errorCount": 0,
-    "filePath": "non-ignored.js",
+    "filePath": "folder/non-ignored.js",
     "messages": [],
     "source": "",
     "warningCount": 0,
   },
   {
     "errorCount": 0,
-    "filePath": "folder/non-ignored.js",
+    "filePath": "non-ignored.js",
     "messages": [],
     "source": "",
     "warningCount": 0,
@@ -67,13 +56,6 @@ exports[`ignorePath: default, .prettierignore exists 1`] = `
   {
     "errorCount": 0,
     "filePath": "non-ignored.js",
-    "messages": [],
-    "source": "",
-    "warningCount": 0,
-  },
-  {
-    "errorCount": 0,
-    "filePath": "node_modules/non-ignored.js",
     "messages": [],
     "source": "",
     "warningCount": 0,

@@ -1,6 +1,6 @@
 import * as path from "node:path";
-import * as prettier from "prettier";
 import { diagnose } from "./diagnose.js";
+import { FormatResult } from "./vendor/format.js";
 
 // https://eslint.org/docs/developer-guide/working-with-custom-formatters#description-of-the-results
 export interface LintResult {
@@ -62,79 +62,59 @@ export interface LintMessage {
   nodeType: string;
 }
 
-export interface LintOptions {
-  config?: boolean | string;
-}
-
-export async function lint(
-  filename: string,
-  content: string,
-  options: LintOptions = {},
-): Promise<LintResult> {
-  const { config = true } = options;
-
-  const absoluteFilename = path.resolve(filename);
-  const relativeFilename = path.relative(".", filename);
+export function lint(result: FormatResult): LintResult {
+  const relativeFilename = path.relative(".", result.filename);
 
   const nodeType = "Unknown";
   const ruleId = "prettier/prettier";
 
-  try {
-    const prettierOptions =
-      config === false
-        ? null
-        : await prettier.resolveConfig(absoluteFilename, {
-            config: config === true ? undefined : config,
-          });
-
-    const { diagnostics, formatted } = await diagnose(content, {
-      filepath: filename,
-      ...prettierOptions,
-    });
-
+  if (result.type === "success") {
+    const { input, output } = result;
+    const diagnostics = diagnose(input, output);
     const messages = diagnostics.map(
       ({ message, start: { line, column } }): LintMessage => ({
-        ruleId: ruleId,
+        ruleId,
         severity: LintSeverity.Warning,
         line,
         column,
         message,
-        nodeType: nodeType,
+        nodeType,
       }),
     );
 
     return {
       filePath: relativeFilename,
-      source: content,
-      ...(messages.length === 0 ? {} : { output: formatted }),
+      source: input,
+      ...(messages.length === 0 ? {} : { output }),
       messages,
       errorCount: 0,
       warningCount: messages.length,
     };
-  } catch (error: any) {
-    const message: LintMessage = {
-      ruleId: ruleId,
-      severity: LintSeverity.Error,
-      nodeType: nodeType,
-      ...(error.loc
-        ? // SyntaxError from parser in prettier
-          {
-            line: error.loc.start.line,
-            column: error.loc.start.column,
-            message: error.message.split("\n", 1)[0], // cut the code-frame
-          } /* c8 ignore start */
-        : {
-            line: 0,
-            column: 0,
-            message: typeof error.message === "string" ? error.message : error,
-          }) /* c8 ignore stop */,
-    };
-    return {
-      filePath: relativeFilename,
-      source: content,
-      messages: [message],
-      errorCount: 1,
-      warningCount: 0,
-    };
   }
+
+  const { input, error } = result;
+  const message: LintMessage = {
+    ruleId,
+    severity: LintSeverity.Error,
+    nodeType,
+    ...(error.loc
+      ? // SyntaxError from parser in prettier
+        {
+          line: error.loc.start.line,
+          column: error.loc.start.column,
+          message: error.message.split("\n", 1)[0], // cut the code-frame
+        } /* c8 ignore start */
+      : {
+          line: 0,
+          column: 0,
+          message: typeof error?.message === "string" ? error.message : error,
+        }) /* c8 ignore stop */,
+  };
+  return {
+    filePath: relativeFilename,
+    source: input,
+    messages: [message],
+    errorCount: 1,
+    warningCount: 0,
+  };
 }

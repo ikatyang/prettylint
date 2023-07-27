@@ -1,11 +1,5 @@
 import { LinesAndColumns } from "lines-and-columns";
-import * as prettier from "prettier";
 import * as utils from "prettier-linter-helpers";
-
-export interface DiagnoseResult {
-  formatted: string;
-  diagnostics: Diagnostic[];
-}
 
 export interface Diagnostic {
   start: Location;
@@ -31,17 +25,10 @@ export interface Location {
   offset: number;
 }
 
-export async function diagnose(
-  content: string,
-  options?: prettier.Options,
-): Promise<DiagnoseResult> {
-  const diagnostics: Diagnostic[] = [];
-
-  const formatted = await prettier.format(content, options);
-  const differences = utils.generateDifferences(content, formatted);
-
-  if (differences.length !== 0) {
-    differences.forEach((difference) => {
+export function diagnose(input: string, output: string) {
+  return utils
+    .generateDifferences(input, output)
+    .map((difference): Diagnostic => {
       const {
         offset: startOffset,
         deleteText = "",
@@ -75,22 +62,19 @@ export async function diagnose(
         /* c8 ignore stop */
       }
 
-      const locator = new LinesAndColumns(content);
+      const locator = new LinesAndColumns(input);
       const getLocation = (offset: number): Location => {
         const { line, column } = locator.locationForIndex(offset)!;
         return { line, column, offset };
       };
 
-      diagnostics.push({
+      return {
         start: getLocation(startOffset),
         end: getLocation(endOffset),
         message,
         operation,
         insertText: insertText,
         deleteText: deleteText,
-      });
+      };
     });
-  }
-
-  return { diagnostics, formatted };
 }
