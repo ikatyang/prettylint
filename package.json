@@ -1,7 +1,7 @@
 {
   "name": "prettylint",
   "type": "module",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Run Prettier as a linter",
   "keywords": [
     "linter",
