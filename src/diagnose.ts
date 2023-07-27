@@ -19,7 +19,7 @@ export enum Operation {
 export interface Location {
   /** 1-based */
   line: number;
-  /** 0-based */
+  /** 1-based */
   column: number;
   /** 0-based */
   offset: number;
@@ -65,7 +65,7 @@ export function diagnose(input: string, output: string) {
       const locator = new LinesAndColumns(input);
       const getLocation = (offset: number): Location => {
         const { line, column } = locator.locationForIndex(offset)!;
-        return { line, column, offset };
+        return { line: line + 1, column: column + 1, offset };
       };
 
       return {

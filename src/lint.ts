@@ -5,7 +5,7 @@ import { FormatResult } from "./vendor/format.js";
 // https://eslint.org/docs/developer-guide/working-with-custom-formatters#description-of-the-results
 export interface LintResult {
   /**
-   * The path to the file relative to the current working directory (the path from which eslint was executed).
+   * The absolute path to the file that was linted.
    */
   filePath: string;
   /**
@@ -63,8 +63,6 @@ export interface LintMessage {
 }
 
 export function lint(result: FormatResult): LintResult {
-  const relativeFilename = path.relative(".", result.filename);
-
   const nodeType = "Unknown";
   const ruleId = "prettier/prettier";
 
@@ -83,7 +81,7 @@ export function lint(result: FormatResult): LintResult {
     );
 
     return {
-      filePath: relativeFilename,
+      filePath: result.filename,
       source: input,
       ...(messages.length === 0 ? {} : { output }),
       messages,
@@ -111,7 +109,7 @@ export function lint(result: FormatResult): LintResult {
         }) /* c8 ignore stop */,
   };
   return {
-    filePath: relativeFilename,
+    filePath: result.filename,
     source: input,
     messages: [message],
     errorCount: 1,

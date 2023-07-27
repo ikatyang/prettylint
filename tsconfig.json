@@ -1,5 +1,5 @@
 {
-  "include": ["bin/**/*", "src/**/*"],
+  "include": ["bin/**/*", "src/**/*", "scripts/**/*", "*"],
   "compilerOptions": {
     "strict": true,
     "target": "ES2021",
