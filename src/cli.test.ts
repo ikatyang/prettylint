@@ -1,13 +1,11 @@
 import * as fs from "node:fs/promises";
+import * as os from "node:os";
 import * as path from "node:path";
-import { copy } from "fs-extra";
-import serializerAnsi from "jest-snapshot-serializer-ansi";
-import { temporaryDirectoryTask } from "tempy";
+import { copy, remove } from "fs-extra";
 import { expect, test } from "vitest";
 import { run } from "./cli.js";
 
-expect.addSnapshotSerializer(serializerAnsi);
-
+const TEMP_DIR = await fs.realpath(os.tmpdir());
 const FIXTURES_DIRNAME = path.resolve(__dirname, "../fixtures");
 
 test("ignorePath: default, .prettierignore exists", async () => {
@@ -61,25 +59,29 @@ async function runCli(fixtureName: string, argv: string[]) {
   const originalConsoleLog = console.log;
   const originalCwd = process.cwd();
   const originalExitCode = process.exitCode;
+  const dirname = path.join(
+    TEMP_DIR,
+    expect.getState().currentTestName!.replace(/[^0-9a-zA-Z]/g, "_"),
+  );
   try {
-    return await temporaryDirectoryTask(async (dirname) => {
-      const stdout: string[] = [];
-      await copy(path.join(FIXTURES_DIRNAME, fixtureName), dirname);
-      process.chdir(dirname);
-      console.log = (...messages) => {
-        if (messages.length) {
-          stdout.push(messages.join(" "));
-        }
-      };
-      const results = await run(argv);
-      const tree = await getTree(dirname);
-      return {
-        tree,
-        stdout: stdout.length === 0 ? undefined : stdout.join("\n"),
-        results,
-        exitCode: process.exitCode ?? 0,
-      };
-    });
+    await fs.mkdir(dirname, { recursive: true });
+    const stdout: string[] = [];
+    await copy(path.join(FIXTURES_DIRNAME, fixtureName), dirname);
+    process.chdir(dirname);
+    console.log = (...messages) => {
+      if (messages.length) {
+        stdout.push(messages.join(" "));
+      }
+    };
+    const results = await run(argv);
+    const tree = await getTree(dirname);
+    await remove(dirname);
+    return {
+      tree,
+      stdout: stdout.length === 0 ? undefined : stdout.join("\n"),
+      results,
+      exitCode: process.exitCode ?? 0,
+    };
   } finally {
     process.chdir(originalCwd);
     process.exitCode = originalExitCode;

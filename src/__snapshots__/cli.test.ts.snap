@@ -9,8 +9,8 @@ exports[`fix: true 1`] = `
 
 exports[`format: default 1`] = `
 "
-  unformatted.js:0:7
-  ⚠  0:7  Replace = with ·=·      prettier/prettier
+  unformatted.js:1:8
+  ⚠  1:8  Replace = with ·=·      prettier/prettier
 
   syntax-error.js:1:7
   ✖  1:7  Unexpected token (1:7)  prettier/prettier
@@ -24,7 +24,7 @@ exports[`ignorePath: ".ignore" 1`] = `
 [
   {
     "errorCount": 0,
-    "filePath": "non-ignored.js",
+    "filePath": "<tmpDir>/src_cli_test_ts___ignorePath____ignore_/non-ignored.js",
     "messages": [],
     "source": "",
     "warningCount": 0,
@@ -36,14 +36,14 @@ exports[`ignorePath: default, .prettierignore does not exist 1`] = `
 [
   {
     "errorCount": 0,
-    "filePath": "folder/non-ignored.js",
+    "filePath": "<tmpDir>/src_cli_test_ts___ignorePath__default___prettierignore_does_not_exist/folder/non-ignored.js",
     "messages": [],
     "source": "",
     "warningCount": 0,
   },
   {
     "errorCount": 0,
-    "filePath": "non-ignored.js",
+    "filePath": "<tmpDir>/src_cli_test_ts___ignorePath__default___prettierignore_does_not_exist/non-ignored.js",
     "messages": [],
     "source": "",
     "warningCount": 0,
@@ -55,7 +55,7 @@ exports[`ignorePath: default, .prettierignore exists 1`] = `
 [
   {
     "errorCount": 0,
-    "filePath": "non-ignored.js",
+    "filePath": "<tmpDir>/src_cli_test_ts___ignorePath__default___prettierignore_exists/non-ignored.js",
     "messages": [],
     "source": "",
     "warningCount": 0,

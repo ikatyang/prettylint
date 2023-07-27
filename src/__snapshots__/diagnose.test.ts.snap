@@ -7,16 +7,16 @@ exports[`operation: delete 1`] = `
   {
     "deleteText": " ",
     "end": {
-      "column": 9,
-      "line": 0,
+      "column": 10,
+      "line": 1,
       "offset": 9,
     },
     "insertText": "",
     "message": "Delete \`·\`",
     "operation": 0,
     "start": {
-      "column": 8,
-      "line": 0,
+      "column": 9,
+      "line": 1,
       "offset": 8,
     },
   },
@@ -28,16 +28,16 @@ exports[`operation: insert 1`] = `
   {
     "deleteText": "",
     "end": {
-      "column": 7,
-      "line": 0,
+      "column": 8,
+      "line": 1,
       "offset": 7,
     },
     "insertText": " ",
     "message": "Insert \`·\`",
     "operation": 1,
     "start": {
-      "column": 7,
-      "line": 0,
+      "column": 8,
+      "line": 1,
       "offset": 7,
     },
   },
@@ -49,16 +49,16 @@ exports[`operation: replace 1`] = `
   {
     "deleteText": "'a'",
     "end": {
-      "column": 13,
-      "line": 0,
+      "column": 14,
+      "line": 1,
       "offset": 13,
     },
     "insertText": "\\"a\\"",
     "message": "Replace \`'a'\` with \`\\"a\\"\`",
     "operation": 2,
     "start": {
-      "column": 10,
-      "line": 0,
+      "column": 11,
+      "line": 1,
       "offset": 10,
     },
   },
