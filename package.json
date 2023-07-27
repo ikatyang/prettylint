@@ -25,18 +25,21 @@
   },
   "dependencies": {
     "eslint-formatter-pretty": "^5.0.0",
-    "globby": "^13.2.2",
+    "fast-glob": "^3.3.1",
     "ignore": "^5.2.4",
     "lines-and-columns": "^2.0.3",
     "meow": "^12.0.1",
     "prettier-linter-helpers": "^1.0.0"
   },
   "devDependencies": {
+    "@types/fs-extra": "11.0.1",
     "@types/prettier-linter-helpers": "1.0.1",
     "@vitest/coverage-v8": "0.33.0",
+    "fs-extra": "11.1.1",
+    "jest-snapshot-serializer-ansi": "2.1.0",
     "prettier": "3.0.0",
     "standard-version": "9.5.0",
-    "strip-ansi": "7.1.0",
+    "tempy": "3.1.0",
     "typescript": "5.1.6",
     "vite": "4.4.6",
     "vitest": "0.33.0"
@@ -50,7 +53,8 @@
   "files": [
     "/bin/**/*",
     "/lib/**/*",
-    "/CHANGELOG.md"
+    "/CHANGELOG.md",
+    "/ThirdPartyNoticeText.txt"
   ],
   "packageManager": "pnpm@8.6.6",
   "pnpm": {

@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`content: SyntaxError 1`] = `
+exports[`failure 1`] = `
 {
   "errorCount": 1,
   "filePath": "path/to/somewhere.js",
@@ -19,7 +19,7 @@ exports[`content: SyntaxError 1`] = `
 }
 `;
 
-exports[`content: formatted 1`] = `
+exports[`success 1`] = `
 {
   "errorCount": 0,
   "filePath": "path/to/somewhere.js",

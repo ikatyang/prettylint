@@ -1,131 +1,113 @@
+import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import stripAnsi from "strip-ansi";
-import { afterAll, beforeAll, beforeEach, expect, test, vi } from "vitest";
+import { copy } from "fs-extra";
+import serializerAnsi from "jest-snapshot-serializer-ansi";
+import { temporaryDirectoryTask } from "tempy";
+import { expect, test } from "vitest";
 import { run } from "./cli.js";
 
-const baseDir = path.resolve(__dirname, "../fixtures/cli");
+expect.addSnapshotSerializer(serializerAnsi);
 
-let status: number | undefined;
-let stdout: string | undefined;
-let writes: { filename: string; content: string }[];
-
-setup();
+const FIXTURES_DIRNAME = path.resolve(__dirname, "../fixtures");
 
 test("ignorePath: default, .prettierignore exists", async () => {
-  const results = await runCli(["**/*.js"], {
-    cwd: `${baseDir}/ignore-path/default-with-prettierignore`,
-  });
-  expect(status).toBe(0);
+  const { results, exitCode } = await runCli(
+    "ignore-path/default-with-prettierignore",
+    ["**/*.js"],
+  );
   expect(results).toMatchSnapshot();
+  expect(exitCode).toBe(0);
 });
 
 test("ignorePath: default, .prettierignore does not exist", async () => {
-  const results = await runCli(["**/*.js"], {
-    cwd: `${baseDir}/ignore-path/default-without-prettierignore`,
-  });
-  expect(status).toBe(0);
+  const { results, exitCode } = await runCli(
+    "ignore-path/default-without-prettierignore",
+    ["**/*.js"],
+  );
   expect(results).toMatchSnapshot();
+  expect(exitCode).toBe(0);
 });
 
 test('ignorePath: ".ignore"', async () => {
-  const results = await runCli(["**/*.js", "--ignore-path", ".ignore"], {
-    cwd: `${baseDir}/ignore-path/custom-ignore`,
-  });
-  expect(status).toBe(0);
+  const { results, exitCode } = await runCli("ignore-path/custom-ignore", [
+    "**/*.js",
+    "--ignore-path",
+    ".ignore",
+  ]);
   expect(results).toMatchSnapshot();
+  expect(exitCode).toBe(0);
 });
 
 test("fix: true", async () => {
-  await runCli(["**/*.js", "--fix"], { cwd: `${baseDir}/fix` });
-  expect(status).toBe(0);
+  const { tree, stdout, exitCode } = await runCli("fix", ["**/*.js", "--fix"]);
+  expect(tree).toMatchSnapshot();
   expect(stdout).toBe(undefined);
-  expect(writes).toMatchSnapshot();
+  expect(exitCode).toBe(0);
 });
 
 test("format: default", async () => {
-  await runCli(["**/*.js"], { cwd: `${baseDir}/format/default` });
-  expect(status).toBe(1);
+  const { stdout, exitCode } = await runCli("format/default", ["**/*.js"]);
   expect(stdout).toMatchSnapshot();
+  expect(exitCode).toBe(1);
 });
 
 test("silent: true", async () => {
-  await runCli(["**/*.js", "--silent"], { cwd: `${baseDir}/silent` });
-  expect(status).toBe(1);
+  const { stdout, exitCode } = await runCli("silent", ["**/*.js", "--silent"]);
+  expect(exitCode).not.toBe(0);
   expect(stdout).toBe(undefined);
 });
 
-interface RunCliOptions {
-  cwd: string;
-}
-
-async function runCli(argv: string[], options: RunCliOptions) {
-  process.chdir(options.cwd);
-  const results = await run(argv);
-  status =
-    status !== undefined
-      ? status
-      : process.exitCode !== undefined
-      ? process.exitCode
-      : 0;
-  stdout = stdout === undefined ? undefined : stripAnsi(stdout);
-  return results;
-}
-
-function setup() {
+async function runCli(fixtureName: string, argv: string[]) {
+  const originalConsoleLog = console.log;
   const originalCwd = process.cwd();
-  const originalEnvCi = process.env.CI;
   const originalExitCode = process.exitCode;
-
-  beforeAll(() => {
-    vi.spyOn(console, "log").mockImplementation((...messages: string[]) => {
-      if (!isExited()) {
-        stdout = `${stdout === undefined ? "" : stdout}${messages.join(" ")}\n`;
-      }
-    });
-    vi.mock("node:fs", async () => {
+  try {
+    return await temporaryDirectoryTask(async (dirname) => {
+      const stdout: string[] = [];
+      await copy(path.join(FIXTURES_DIRNAME, fixtureName), dirname);
+      process.chdir(dirname);
+      console.log = (...messages) => {
+        if (messages.length) {
+          stdout.push(messages.join(" "));
+        }
+      };
+      const results = await run(argv);
+      const tree = await getTree(dirname);
       return {
-        ...(await vi.importActual<typeof import("node:fs")>("node:fs")),
-        writeFile: vi
-          .fn()
-          .mockImplementation(
-            (filename: string, content: string, callback: () => void) => {
-              if (!isExited()) {
-                writes.push({ filename, content });
-              }
-              callback();
-            },
-          ),
+        tree,
+        stdout: stdout.length === 0 ? undefined : stdout.join("\n"),
+        results,
+        exitCode: process.exitCode ?? 0,
       };
     });
-    vi.spyOn(process, "exit").mockImplementation((exitCode?: number) => {
-      if (!isExited()) {
-        status = exitCode === undefined ? 0 : exitCode;
-      }
-      return undefined as never;
-    });
-  });
-
-  beforeEach(() => {
-    process.env.CI = "true";
-    process.exitCode = undefined as any;
-
-    status = undefined;
-    stdout = undefined;
-    writes = [];
-  });
-
-  afterAll(() => {
+  } finally {
     process.chdir(originalCwd);
     process.exitCode = originalExitCode;
-
-    if (originalEnvCi !== undefined) {
-      process.env.CI = originalEnvCi;
-    } else {
-      delete process.env.CI;
-    }
-  });
+    console.log = originalConsoleLog;
+  }
 }
 
-function isExited() {
-  return status !== undefined || process.exitCode !== undefined;
+async function getTree(directory: string, root = true) {
+  let text = root ? "/" : `${path.basename(directory)}/`;
+  for (const basename of await fs.readdir(directory)) {
+    const filename = path.join(directory, basename);
+    const stat = await fs.stat(filename);
+    if (stat.isFile()) {
+      const content = await fs.readFile(filename, "utf8");
+      text += "\n" + indent(basename + "\n" + indent(content));
+      continue;
+    }
+    if (stat.isDirectory()) {
+      text += "\n" + indent(await getTree(filename, false));
+      continue;
+    }
+  }
+  return text;
+}
+
+function indent(text: string) {
+  return text
+    .split("\n")
+    .map((_) => " ".repeat(2) + _)
+    .join("\n");
 }

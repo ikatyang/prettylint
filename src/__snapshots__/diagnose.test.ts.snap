@@ -1,84 +1,66 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`already formatted 1`] = `
-{
-  "diagnostics": [],
-  "formatted": "const x = \\"a\\";
-",
-}
-`;
+exports[`already formatted 1`] = `[]`;
 
 exports[`operation: delete 1`] = `
-{
-  "diagnostics": [
-    {
-      "deleteText": " ",
-      "end": {
-        "column": 9,
-        "line": 0,
-        "offset": 9,
-      },
-      "insertText": "",
-      "message": "Delete \`·\`",
-      "operation": 0,
-      "start": {
-        "column": 8,
-        "line": 0,
-        "offset": 8,
-      },
+[
+  {
+    "deleteText": " ",
+    "end": {
+      "column": 9,
+      "line": 0,
+      "offset": 9,
     },
-  ],
-  "formatted": "const x = \\"a\\";
-",
-}
+    "insertText": "",
+    "message": "Delete \`·\`",
+    "operation": 0,
+    "start": {
+      "column": 8,
+      "line": 0,
+      "offset": 8,
+    },
+  },
+]
 `;
 
 exports[`operation: insert 1`] = `
-{
-  "diagnostics": [
-    {
-      "deleteText": "",
-      "end": {
-        "column": 7,
-        "line": 0,
-        "offset": 7,
-      },
-      "insertText": " ",
-      "message": "Insert \`·\`",
-      "operation": 1,
-      "start": {
-        "column": 7,
-        "line": 0,
-        "offset": 7,
-      },
+[
+  {
+    "deleteText": "",
+    "end": {
+      "column": 7,
+      "line": 0,
+      "offset": 7,
     },
-  ],
-  "formatted": "const x = \\"a\\";
-",
-}
+    "insertText": " ",
+    "message": "Insert \`·\`",
+    "operation": 1,
+    "start": {
+      "column": 7,
+      "line": 0,
+      "offset": 7,
+    },
+  },
+]
 `;
 
 exports[`operation: replace 1`] = `
-{
-  "diagnostics": [
-    {
-      "deleteText": "'a'",
-      "end": {
-        "column": 13,
-        "line": 0,
-        "offset": 13,
-      },
-      "insertText": "\\"a\\"",
-      "message": "Replace \`'a'\` with \`\\"a\\"\`",
-      "operation": 2,
-      "start": {
-        "column": 10,
-        "line": 0,
-        "offset": 10,
-      },
+[
+  {
+    "deleteText": "'a'",
+    "end": {
+      "column": 13,
+      "line": 0,
+      "offset": 13,
     },
-  ],
-  "formatted": "const x = \\"a\\";
-",
-}
+    "insertText": "\\"a\\"",
+    "message": "Replace \`'a'\` with \`\\"a\\"\`",
+    "operation": 2,
+    "start": {
+      "column": 10,
+      "line": 0,
+      "offset": 10,
+    },
+  },
+]
 `;
